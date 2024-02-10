@@ -3,21 +3,31 @@
 This is a set of C# code implementing a **ECS (Entity-Component-System-like)** architecture, which is designed with reference to Unity DOTS. It is mainly used for data-oriented game development patterns, which separates data and logic in the game runtime, handling a large number of game entities more efficiently.
 
 ### Features
-1. **Data-Oriented**: Data-oriented design provides better performance by separating data structures from processing logic, better utilizing the hardware features of modern computers.
-2. **Readability**: Organize entities, components, and systems in a clear way, making the entire architecture easy to understand and extend.
-3. **Scalability**: With the use of interfaces and generics, your architecture has high flexibility and scalability, allowing for easy addition of new components and systems to meet the needs of different games.
-4. **Testability**: Organizing game logic in components and systems makes unit testing and debugging easier, ensuring better code quality and stability.
-5. **Unity Integration**: Code integrates with the Unity engine, using Unity's scene loading events and MonoBehaviour lifecycle, allowing it to be used directly in Unity projects.
+1. **Data-Oriented**
+> Data-oriented design provides better performance by separating data structures from processing logic, better utilizing the hardware features of modern computers.
+2. **Readability**
+> Organize entities, components, and systems in a clear way, making the entire architecture easy to understand and extend.
+3. **Scalability**
+> With the use of interfaces and generics, your architecture has high flexibility and scalability, allowing for easy addition of new components and systems to meet the needs of different games.
+4. **Testability**
+> Organizing game logic in components and systems makes unit testing and debugging easier, ensuring better code quality and stability.
+5. **Unity Integration**
+> Code integrates with the Unity engine, using Unity's scene loading events and MonoBehaviour lifecycle, allowing it to be used directly in Unity projects.
 
 ### Definitions
 
 In this codebase, I have defined the following classes and interfaces:
 
-1. **Argument**: Used to describe the data of a component, each component has a set of properties, such as basedEntity, enabled, name, and index, as well as some methods for normalization, serialization, and initialization.
-2. **IEntity**: Interface describing a game entity, each entity should implement this interface and provide methods for normalization, serialization, and initialization.
-3. **ISystem**: Interface describing a system, each system should implement this interface and provide methods for initialization and updating.
-4. **Space**: Used to manage all entities and systems in the game world, including initialization, serialization, and updating.
-5. **SystemBase**: Inherits from Unity's MonoBehaviour, responsible for listening to scene loading and unloading events, as well as updating systems per frame.
+1. **Argument**
+> Used to describe the data of a component, each component has a set of properties, such as basedEntity, enabled, name, and index, as well as some methods for normalization, serialization, and initialization.
+2. **IEntity**
+> Interface describing a game entity, each entity should implement this interface and provide methods for normalization, serialization, and initialization.
+3. **ISystem**
+> Interface describing a system, each system should implement this interface and provide methods for initialization and updating.
+4. **Space**
+> Used to manage all entities and systems in the game world, including initialization, serialization, and updating.
+5. **SystemBase**
+> Inherits from Unity's MonoBehaviour, responsible for listening to scene loading and unloading events, as well as updating systems per frame.
 
 ### Usage
 
