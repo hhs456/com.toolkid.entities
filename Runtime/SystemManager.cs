@@ -22,6 +22,12 @@ public static class SystemManager {
     public static Dictionary<Scene, JobHandle[]> UpdateJobs { get => updateJobs;}
     public static Dictionary<Scene, Space> Spaces { get => spaces;}
 
+    public static void CreateSpace(Scene scene, Space space) {
+        spaces.TryAdd(scene, space);        
+    }
+    public static void DeleteSpace(Scene scene) {
+        spaces.Remove(scene);        
+    }
     public static void CreateSystem(Scene scene, params ISystem[] enabledSystems) {
         systems.TryAdd(scene, enabledSystems);
         updateJobs.TryAdd(scene, new JobHandle[enabledSystems.Length]);
@@ -30,7 +36,7 @@ public static class SystemManager {
         systems.Remove(scene);
         updateJobs.Remove(scene);
     }
-    public static void ActivateSystem(Scene scene) {
+    public static void EnableSystem(Scene scene) {
         foreach (var system in systems[scene]) {
             system.Initialize(scene);
         }

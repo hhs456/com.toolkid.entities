@@ -1,66 +1,116 @@
-## Toolkid.EditorToolkits
+## Toolkid.Entities
 
-This repository offers a collection of custom attributes designed to simplify operations in Unity's Inspector.
+This is a set of C# code implementing a **ECS (Entity-Component-System-like)** architecture, which is designed with reference to Unity DOTS. It is mainly used for data-oriented game development patterns, which separates data and logic in the game runtime, handling a large number of game entities more efficiently.
 
-### LabelAttribute
+### Features
+1. **Data-Oriented**: Data-oriented design provides better performance by separating data structures from processing logic, better utilizing the hardware features of modern computers.
+2. **Readability**: Organize entities, components, and systems in a clear way, making the entire architecture easy to understand and extend.
+3. **Scalability**: With the use of interfaces and generics, your architecture has high flexibility and scalability, allowing for easy addition of new components and systems to meet the needs of different games.
+4. **Testability**: Organizing game logic in components and systems makes unit testing and debugging easier, ensuring better code quality and stability.
+5. **Unity Integration**: Code integrates with the Unity engine, using Unity's scene loading events and MonoBehaviour lifecycle, allowing it to be used directly in Unity projects.
 
-`LabelAttribute` allows you to display custom names for fields in Unity's Inspector.
+### Definitions
 
-#### How to Use
+In this codebase, I have defined the following classes and interfaces:
 
-Add `[Label("Your Custom Name")]` before the field you want to display with a custom name.
+1. **Argument**: Used to describe the data of a component, each component has a set of properties, such as basedEntity, enabled, name, and index, as well as some methods for normalization, serialization, and initialization.
+2. **IEntity**: Interface describing a game entity, each entity should implement this interface and provide methods for normalization, serialization, and initialization.
+3. **ISystem**: Interface describing a system, each system should implement this interface and provide methods for initialization and updating.
+4. **Space**: Used to manage all entities and systems in the game world, including initialization, serialization, and updating.
+5. **SystemBase**: Inherits from Unity's MonoBehaviour, responsible for listening to scene loading and unloading events, as well as updating systems per frame.
 
-```csharp
-public class Example : MonoBehaviour
-{
-    [Label("Health Points")]
-    public int health;
+### Usage
+
+Suppose we are developing a simple game that includes some ball entities, each ball has position and color components, and we have a system to update the positions of these balls.
+
+First, we define the components and system for the ball entities:
+
+```C#
+using System;
+using UnityEngine;
+
+// Position component
+public class Position : Argument {
+    public Vector3 Value { get; set; }
+
+    public Position() { }
+
+    public Position(Vector3 value) {
+        Value = value;
+    }
+}
+
+// Color component
+public class ColorComponent : Argument {
+    public Color Value { get; set; }
+
+    public ColorComponent() { }
+
+    public ColorComponent(Color value) {
+        Value = value;
+    }
+}
+
+// Ball movement system
+public class BallMovementSystem : ISystem {
+    public void Initialize(Scene scene) {
+        Debug.Log("Ball movement system initialized.");
+    }
+
+    public void Update(Scene scene) {
+        var space = SystemManager.Spaces[scene];
+        var balls = space.GetEntities<Ball>();
+        foreach (var ball in balls) {
+            var position = ball.GetArgument<Position>();
+            position.Value += Vector3.one * Time.deltaTime;
+            Debug.Log($"Ball at {position.Value}");
+        }
+    }
 }
 ```
 
-With this, the field will display as "Health Points" in Unity's Inspector, instead of the default "health".
+Then, we create the ball entities:
 
-### ReadOnlyAttribute
+```C#
+public class Ball : IEntity {
+    public int Index { get; set; }
 
-`ReadOnlyAttribute` enables you to set fields in Unity's Inspector to read-only.
-
-#### How to Use
-
-Add `[ReadOnly]` before the field you want to set as read-only.
-
-```csharp
-public class Example : MonoBehaviour
-{
-    [ReadOnly]
-    public int readOnlyField;
+    public void Initialize(Scene scene) {
+        Debug.Log("Ball initialized.");
+    }
 }
 ```
 
-This way, the field will be uneditable in Unity's Inspector and will be read-only.
+Finally, we use these components and systems in the Unity scene by creating an empty GameObject and adding a SystemController script:
 
-### EnumExtension
+```C#
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-`EnumExtension` provides utility methods to fetch custom display names for enum values in Unity's Inspector using `InspectorNameAttribute`.
+public class SystemController : SystemBase {    
 
-#### How to Use
+    void OnEnable(){
+        SystemManager.EnableSystem(scene);
+    }
 
-1. **GetInspectorName**: This method returns the custom display name for a given enum value.
+    protected override void Initialize(Scene scene) {        
+        SystemManager.CreateSystem(scene, new BallMovementSystem());
+        var space = new Space();
+        space.Initialize(new IEntity[] { new Ball() }, scene);
+        SystemManager.CreateSpace(scene, space);
+    }
+}
+```
 
-    ```csharp
-    MyEnum enumValue = MyEnum.Option1;
-    string displayName = enumValue.GetInspectorName();
-    ```
-
-2. **GetInspectorNames**: This method returns an array of custom display names for all values in an enum type.
-
-    ```csharp
-    string[] displayNames = MyEnum.Option1.GetInspectorNames();
-    ```
-
-Both methods look for the `InspectorNameAttribute` on the enum fields and return the custom names if found. If not found, they return the original enum names and log a warning.
+Now, every time the scene is loaded, the systems and entities will be created, initialized, and ready to go, and the systems will be driven when the script is enabled.
 
 ### Notes
+Usage may change due to version updates. If you have any questions, please feel free to contact me.
 
-When using the Label attribute, note that Unity's `PropertyDrawer` API does not directly support custom drawing of arrays. This attribute attempts to determine whether it is an element of an array by parsing the property's path and appending an index to the label name. However, this approach will not change the label name of the entire array, only the label names of the array elements.
+If you find a better way, or have any suggestions and feedback, please feel free to contact me. Your contributions will help improve this toolkit and benefit more Unity developers.
 
-If you find a better way to customize the drawing of arrays, or have any suggestions and feedback, feel free to contact me. Your contributions will help improve this toolkit and benefit more Unity developers.
+## License
+
+MIT License
+
+Copyright (c) [2024] [Hanson]
