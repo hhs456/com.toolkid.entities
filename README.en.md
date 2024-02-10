@@ -1,8 +1,8 @@
-## Toolkid.Entities
+# Toolkid.Entities
 
 This is a set of C# code implementing a **ECS (Entity-Component-System-like)** architecture, which is designed with reference to Unity DOTS. It is mainly used for data-oriented game development patterns, which separates data and logic in the game runtime, handling a large number of game entities more efficiently.
 
-### Features
+## Features
 1. **Data-Oriented**
 > Data-oriented design provides better performance by separating data structures from processing logic, better utilizing the hardware features of modern computers.
 2. **Readability**
@@ -14,7 +14,7 @@ This is a set of C# code implementing a **ECS (Entity-Component-System-like)** a
 5. **Unity Integration**
 > Code integrates with the Unity engine, using Unity's scene loading events and MonoBehaviour lifecycle, allowing it to be used directly in Unity projects.
 
-### Definitions
+## Definitions
 
 In this codebase, I have defined the following classes and interfaces:
 
@@ -29,7 +29,7 @@ In this codebase, I have defined the following classes and interfaces:
 5. **SystemBase**
 > Inherits from Unity's MonoBehaviour, responsible for listening to scene loading and unloading events, as well as updating systems per frame.
 
-### Usage
+## Usage
 
 Suppose we are developing a simple game that includes some ball entities, each ball has position and color components, and we have a system to update the positions of these balls.
 
@@ -114,7 +114,7 @@ public class SystemController : SystemBase {
 
 Now, every time the scene is loaded, the systems and entities will be created, initialized, and ready to go, and the systems will be driven when the script is enabled.
 
-### Notes
+## Notes
 Usage may change due to version updates. If you have any questions, please feel free to contact me.
 
 If you find a better way, or have any suggestions and feedback, please feel free to contact me. Your contributions will help improve this toolkit and benefit more Unity developers.
