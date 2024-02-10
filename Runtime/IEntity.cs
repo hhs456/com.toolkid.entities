@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -5,35 +6,31 @@ using UnityEngine.SceneManagement;
 public interface IEntity
 {    
     public int Index { get; set; }
+    public string Name { get; set; }    
+
+    public Dictionary<Type,Argument> arguments { get; set; }
 
     public void Normalize() {
         Index = -1;
+        arguments = new Dictionary<Type, Argument>();
     }
 
-    public void Serialize(int i) {
+    public void Serialize(int i, params Argument[] args) {
         Index = i;
-        IList args = new List<Argument>();
-        var props = this.GetType().GetProperties();
-        foreach ( var prop in props ) {
-            if(prop.PropertyType == typeof(Argument) || prop.PropertyType == typeof(Argument)) {
-                args.Add(prop.GetValue(this));
-            }
-        }        
-        foreach(var argument in (List<Argument>)args) {
+        arguments = new Dictionary<Type, Argument>();
+        foreach (var argument in args) {
+            arguments.TryAdd(argument.GetType(), argument);
             argument.Serialize(i);
         }
     }
-    public void Initialize(Scene scene) {        
-        IList args = new List<Argument>();
-        var props = this.GetType().GetProperties();
-        foreach (var prop in props) {
-            if (prop.PropertyType == typeof(Argument) || prop.PropertyType == typeof(Argument)) {
-                args.Add(prop.GetValue(this));
-            }
-        }
-        foreach (var argument in (List<Argument>)args) {
-            argument.Initialize(scene);
+
+    public void Initialize(Scene scene) {
+        foreach (var argument in arguments) {
+            argument.Value.Initialize(scene);
         }
     }
     
+    public T GetArgument<T>() where T: Argument {
+        return (T)arguments[typeof(T)];
+    }
 }

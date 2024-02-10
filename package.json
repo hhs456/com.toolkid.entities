@@ -3,13 +3,11 @@
   "displayName": "Toolkid.Entities",
   "version": "1.0.0",
   "unity": "2021.3",
-  "description": "The DOD toolkit package allows developers to build ECS.",
+  "description": "This is a set of C# code implementing a ECS (Entity-Component-System-like) architecture, which is designed with reference to Unity DOTS.",
   "keywords": [
     "editor"
   ],
   "relatedPackages": {},
   "repository": {},
-  "samples": [
-
-  ]
+  "samples": []
 }

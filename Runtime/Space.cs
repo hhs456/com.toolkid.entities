@@ -47,6 +47,5 @@ public class Space
 
     public T GetEntity<T>(int i) where T : IEntity {
         return ((T[])entities[typeof(T)])[i];
-    }
-    
+    }    
 }
